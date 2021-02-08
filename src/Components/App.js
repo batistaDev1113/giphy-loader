@@ -10,6 +10,7 @@ function App() {
   //declare state
   const [data, setData] = useState([])
   const [query, setQuery] = useState('dogs')
+  const [isLoading, setIsLoading] = useState(true)
 
   const updateQuery = (input) => setQuery(input) 
 
@@ -18,6 +19,7 @@ function App() {
     axios(`http://api.giphy.com/v1/gifs/search?q=${query}&limit=24&api_key=4hYEwOGpHRpjIiCrGrQJQOrk5t23IxWj`)
     .then(response => setData(response.data.data))
     .catch(error => console.log('There has been an error fetching this data', error))
+    .finally(() => setIsLoading(false))
   }, [query])
 
   return (
@@ -29,7 +31,9 @@ function App() {
         </div>
       </div>
       <div className="main-content">
+      {isLoading ? <p>Loading....</p> :
         <GifList data={data}/>
+      }
       </div>
     </>
   );
